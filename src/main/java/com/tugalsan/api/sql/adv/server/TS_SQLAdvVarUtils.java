@@ -11,6 +11,7 @@ import com.tugalsan.api.sql.conn.server.*;
 import com.tugalsan.api.sql.sanitize.server.*;
 import com.tugalsan.api.sql.select.server.*;
 import com.tugalsan.api.sql.update.server.*;
+import com.tugalsan.api.unsafe.client.*;
 
 public class TS_SQLAdvVarUtils {
 
@@ -64,11 +65,11 @@ public class TS_SQLAdvVarUtils {
     }
 
     public static boolean setVariable(TS_SQLConnAnchor anchor, CharSequence atVarName, Object value) {
-        TS_SQLSanitizeUtils.sanitize(atVarName);
-        d.ci("setVariable", "atVarName", atVarName, "value", value);
-        //SELECT @var3 := 4;??
-        //SET @var2 := @var1-2;
-        try {
+        return TGS_UnSafe.compile(() -> {
+            TS_SQLSanitizeUtils.sanitize(atVarName);
+            d.ci("setVariable", "atVarName", atVarName, "value", value);
+            //SELECT @var3 := 4;??
+            //SET @var2 := @var1-2;
             var sql = "";
             if (value == null) {
                 d.ce("setVariable", "value == null");
@@ -103,12 +104,8 @@ public class TS_SQLAdvVarUtils {
                 return true;
             }
             d.ce("setVariable.ERROR: Connection.setVariable unknown value instance: ", value);
-        } catch (Exception ex) {
-            d.ce("setVariable.ERROR: Connection.setVariable: ", value);
-            d.ce("setVariable.ERROR: Connection.setVariable.ex: ", ex);
-            throw new RuntimeException(ex);
-        }
-        return false;
+            return false;
+        });
     }
 
     public static Object getVarible(TS_SQLConnAnchor anchor, CharSequence atVarName, int long0_String1_ArrayLong2_ArrayString3) {

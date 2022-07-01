@@ -7,6 +7,7 @@ import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.sql.col.typed.client.*;
 import com.tugalsan.api.sql.conn.server.*;
 import com.tugalsan.api.sql.select.server.*;
+import com.tugalsan.api.unsafe.client.*;
 
 public class TS_SQLAdvTestUtils {
 
@@ -56,7 +57,7 @@ public class TS_SQLAdvTestUtils {
     }
 
     private static Integer testFunction_createSniffFunc(TS_SQLConnAnchor anchor) {
-        try {
+        return TGS_UnSafe.compile(() -> {
             var func_intput = TGS_ListUtils.of(
                     new TGS_SQLColTyped("STR254_SRCTBLNM"),
                     new TGS_SQLColTyped("STR254_TARTBLNM"),
@@ -65,8 +66,6 @@ public class TS_SQLAdvTestUtils {
             var funcBody = new StringBuilder();
             funcBody.append("RETURN CONCAT(STR254_SRCTBLNM, '_', STR254_TARTBLNM, '-', LNG_ID)");
             return TS_SQLAdvFuncUtils.createFunction(anchor, "sniff", func_intput, new TGS_SQLColTyped("STR254_OUT"), funcBody.toString());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        });
     }
 }

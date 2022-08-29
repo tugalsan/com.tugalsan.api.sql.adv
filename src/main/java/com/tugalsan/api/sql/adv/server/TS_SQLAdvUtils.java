@@ -11,7 +11,7 @@ import com.tugalsan.api.sql.select.server.*;
 
 public class TS_SQLAdvUtils {
 
-    final private static TS_Log d = TS_Log.of(TS_SQLAdvUtils.class.getSimpleName());
+    final private static TS_Log d = TS_Log.of(TS_SQLAdvUtils.class);
 
     public static long getOptimalPoolSizeInMb(TS_SQLConnAnchor anchor, float maxPercentOfRam) {
         var ramInMB = TS_OSUtils.getRamInMB();

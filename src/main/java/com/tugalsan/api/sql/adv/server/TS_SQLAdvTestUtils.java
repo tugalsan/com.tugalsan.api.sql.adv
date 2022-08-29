@@ -11,7 +11,7 @@ import com.tugalsan.api.unsafe.client.*;
 
 public class TS_SQLAdvTestUtils {
 
-    final private static TS_Log d = TS_Log.of(TS_SQLAdvTestUtils.class.getSimpleName());
+    final private static TS_Log d = TS_Log.of(TS_SQLAdvTestUtils.class);
 
     public static void testVariables(TS_SQLConnAnchor anchor) {
         var arrName1 = "@ia";

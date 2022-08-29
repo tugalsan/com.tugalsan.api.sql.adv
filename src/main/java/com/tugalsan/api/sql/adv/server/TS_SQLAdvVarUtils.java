@@ -15,7 +15,7 @@ import com.tugalsan.api.unsafe.client.*;
 
 public class TS_SQLAdvVarUtils {
 
-    final private static TS_Log d = TS_Log.of(TS_SQLAdvVarUtils.class.getSimpleName());
+    final private static TS_Log d = TS_Log.of(TS_SQLAdvVarUtils.class);
 
     public static int VARTYP_LNG() {
         return 0;

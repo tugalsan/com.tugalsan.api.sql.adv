@@ -11,7 +11,7 @@ import java.util.stream.*;
 
 public class TS_SQLAdvFuncUtils {
 
-    final private static TS_Log d = TS_Log.of(TS_SQLAdvFuncUtils.class.getSimpleName());
+    final private static TS_Log d = TS_Log.of(TS_SQLAdvFuncUtils.class);
 
     //TODO EXAMPLE BODY1: "RETURN CONCAT(p1, ' ', p2)"
     //TODO EXAMPLE BODY2: 

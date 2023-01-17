@@ -25,7 +25,7 @@ public class TS_SQLAdvFuncUtils {
     //      Select current_date()into date2;
     //      RETURN year(date2)-year(date1);
     //    END 
-    public static Integer createFunction(TS_SQLConnAnchor anchor, CharSequence functionName,
+    public static TS_SQLConnStmtUpdateResult createFunction(TS_SQLConnAnchor anchor, CharSequence functionName,
             List<TGS_SQLColTyped> inputParams, TGS_SQLColTyped output, CharSequence body) {
         TS_SQLSanitizeUtils.sanitize(functionName);
         TS_SQLSanitizeUtils.sanitize(inputParams);
@@ -38,7 +38,7 @@ public class TS_SQLAdvFuncUtils {
         sb.append("CREATE FUNCTION ").append(functionName).append('(');
 
         //SETTING INPUT TYPE
-        IntStream.range(r, inputParams.size()).forEachOrdered(i -> {
+        IntStream.range(r.affectedRowCount, inputParams.size()).forEachOrdered(i -> {
             sb.append(inputParams.get(i).toString());
             sb.append(' ');
             sb.append(TS_SQLConnColUtils.creationType(anchor, inputParams.get(i)));
@@ -63,7 +63,7 @@ public class TS_SQLAdvFuncUtils {
         return r;
     }
 
-    public static int deleteFunction(TS_SQLConnAnchor anchor, CharSequence functionName) {
+    public static TS_SQLConnStmtUpdateResult deleteFunction(TS_SQLConnAnchor anchor, CharSequence functionName) {
         TS_SQLSanitizeUtils.sanitize(functionName);
         var sql = TGS_StringUtils.concat("DROP FUNCTION ", functionName);
         d.ci("deleteFunction.INFO: Connection.deleteFunction.sql: ", sql);

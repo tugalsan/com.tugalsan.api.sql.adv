@@ -13,12 +13,12 @@ public class TS_SQLAdvFuncUtils {
 
     final private static TS_Log d = TS_Log.of(TS_SQLAdvFuncUtils.class);
 
-    //TODO EXAMPLE BODY1: "RETURN CONCAT(p1, ' ', p2)"
-    //TODO EXAMPLE BODY2: 
+    //TODO createFunction test: EXAMPLE BODY1: "RETURN CONCAT(p1, ' ', p2)"
+    //TODO createFunction test: EXAMPLE BODY2: 
     //  DECLARE NAME_FOUND VARCHAR DEFAULT "";
     //  SELECT EMPLOYEE_NAME INTO NAME_FOUND FROM TABLE_NAME WHERE ID = PID;
     //  RETURN NAME_FOUND;
-    //TODO EXAMPLE BODY3;
+    //TODO createFunction test: EXAMPLE BODY3;
     //    CREATE FUNCTION no_of_years(date1 date) RETURNS int DETERMINISTIC
     //    BEGIN
     //     DECLARE date2 DATE;

@@ -56,7 +56,7 @@ public class TS_SQLAdvFuncUtils {
         //BODY 
         sb.append("BEGIN\n").append(body).append("\nEND\n");
 
-        //EXECUTE
+        //RUN
         sql = sb.toString();
         r = TS_SQLUpdateStmtUtils.update(anchor, sql);
         d.ci("createFunction.INFO: Connection.createFunction.sql2: ", sql + ", r:", r);

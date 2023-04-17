@@ -65,7 +65,7 @@ public class TS_SQLAdvVarUtils {
     }
 
     public static boolean setVariable(TS_SQLConnAnchor anchor, CharSequence atVarName, Object value) {
-        return TGS_UnSafe.compile(() -> {
+        return TGS_UnSafe.call(() -> {
             TS_SQLSanitizeUtils.sanitize(atVarName);
             d.ci("setVariable", "atVarName", atVarName, "value", value);
             //SELECT @var3 := 4;??

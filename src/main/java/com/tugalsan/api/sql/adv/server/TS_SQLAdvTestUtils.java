@@ -57,7 +57,7 @@ public class TS_SQLAdvTestUtils {
     }
 
     private static TS_SQLConnStmtUpdateResult testFunction_createSniffFunc(TS_SQLConnAnchor anchor) {
-        return TGS_UnSafe.compile(() -> {
+        return TGS_UnSafe.call(() -> {
             var func_intput = TGS_ListUtils.of(
                     new TGS_SQLColTyped("STR254_SRCTBLNM"),
                     new TGS_SQLColTyped("STR254_TARTBLNM"),

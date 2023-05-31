@@ -6,7 +6,7 @@ import com.tugalsan.api.sql.conn.server.*;
 import com.tugalsan.api.file.txt.server.*;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.os.server.*;
-import com.tugalsan.api.pack.client.*;
+import com.tugalsan.api.tuple.client.*;
 import com.tugalsan.api.sql.select.server.*;
 
 public class TS_SQLAdvUtils {
@@ -19,7 +19,7 @@ public class TS_SQLAdvUtils {
         var thresholdMB = ramInMB * maxPercentOfRam;
         d.cr("getOptimalPoolValue", "#1", "thresholdMB", thresholdMB);
         var sql = "SELECT CEILING(Total_InnoDB_Bytes*1.6/POWER(1024,3)) RIBPS FROM (SELECT SUM(data_length+index_length) Total_InnoDB_Bytes FROM information_schema.tables WHERE engine='InnoDB') A";
-        TGS_Pack1<Long> pack = new TGS_Pack1();
+        TGS_Tuple1<Long> pack = new TGS_Tuple1();
         TS_SQLSelectStmtUtils.select(anchor, sql, rs -> pack.value0 = rs.lng.get(0, 0));
         var optimumMB = pack.value0 * 1024;
         d.cr("getOptimalPoolValue", "#2", "optimumMB", optimumMB);

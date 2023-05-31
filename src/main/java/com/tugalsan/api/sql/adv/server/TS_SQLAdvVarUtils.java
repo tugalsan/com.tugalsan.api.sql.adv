@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.stream.*;
 import com.tugalsan.api.cast.client.*;
 import com.tugalsan.api.list.client.*;
-import com.tugalsan.api.pack.client.*;
+import com.tugalsan.api.tuple.client.*;
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.sql.conn.server.*;
@@ -113,7 +113,7 @@ public class TS_SQLAdvVarUtils {
         d.ci("getVarible.", "atVarName", atVarName, "long0_String1_ArrayLong2_ArrayString3", long0_String1_ArrayLong2_ArrayString3);
         //SELECT @var1, @var2;
         if (long0_String1_ArrayLong2_ArrayString3 == VARTYP_LNG() || long0_String1_ArrayLong2_ArrayString3 == VARTYP_STR()) {
-            TGS_Pack2<Long, String> value = new TGS_Pack2();
+            TGS_Tuple2<Long, String> value = new TGS_Tuple2();
             var sql = "SELECT " + atVarName;
             d.ci("getVarible.INFO: Connection.getVarible.sql: ", sql);
             TS_SQLSelectStmtUtils.select(anchor, sql, rs -> {
@@ -164,7 +164,7 @@ public class TS_SQLAdvVarUtils {
         result.clear();
         var sql = "SELECT " + TGS_StringUtils.toString(atVarNames, ", ");
         d.ci("popVaribles.INFO: Connection.popVaribles.sql: ", sql);
-        TGS_Pack1<Boolean> r = new TGS_Pack1(false);
+        TGS_Tuple1<Boolean> r = new TGS_Tuple1(false);
         TS_SQLSelectStmtUtils.select(anchor, sql, rs -> {
             rs.walkCells(rs0 -> r.value0 = true, (ri, ci) -> {
                 if (long0_String1 == VARTYP_LNG()) {

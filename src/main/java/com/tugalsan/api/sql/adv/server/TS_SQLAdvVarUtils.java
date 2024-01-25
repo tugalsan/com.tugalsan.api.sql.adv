@@ -42,7 +42,7 @@ public class TS_SQLAdvVarUtils {
     public static Long getVariable_ArraySize(TS_SQLConnAnchor anchor, CharSequence atVarName) {
         TS_SQLSanitizeUtils.sanitize(atVarName);
         d.ci("getVariable_ArraySize", "atVarname", atVarName);
-        Object o = getVarible(anchor, TGS_StringUtils.concat(atVarName, "_size"), VARTYP_LNG());
+        var o = getVarible(anchor, TGS_StringUtils.concat(atVarName, "_size"), VARTYP_LNG());
         return o == null ? null : (Long) o;
     }
 
@@ -70,7 +70,6 @@ public class TS_SQLAdvVarUtils {
             d.ci("setVariable", "atVarName", atVarName, "value", value);
             //SELECT @var3 := 4;??
             //SET @var2 := @var1-2;
-            var sql = "";
             if (value == null) {
                 d.ce("setVariable", "value == null");
                 return false;
@@ -90,14 +89,14 @@ public class TS_SQLAdvVarUtils {
                 }
             }
             if (String.class.isInstance(value)) {
-                sql = TGS_StringUtils.concat("SET ", atVarName, " := \"", String.valueOf(value), "\"");
+                var sql = TGS_StringUtils.concat("SET ", atVarName, " := \"", String.valueOf(value), "\"");
                 d.ci("setVariable", "String.class.isInstance(value)", "sql", sql);
                 TS_SQLUpdateStmtUtils.update(anchor, sql);
 
                 return true;
             }
             if (Integer.class.isInstance(value) || TGS_CastUtils.toLong(value) != null) {
-                sql = TGS_StringUtils.concat("SET ", atVarName, " := ", String.valueOf(value));
+                var sql = TGS_StringUtils.concat("SET ", atVarName, " := ", String.valueOf(value));
                 d.ci("setVariable", "Integer.class.isInstance(value) || TK_GWTSharedUtils.cast2Long(value) != null", "sql", sql);
                 TS_SQLUpdateStmtUtils.update(anchor, sql);
 

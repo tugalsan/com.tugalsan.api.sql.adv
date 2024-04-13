@@ -6,36 +6,46 @@ import com.tugalsan.api.sql.conn.server.*;
 import com.tugalsan.api.file.txt.server.*;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.os.server.*;
-import com.tugalsan.api.tuple.client.*;
 import com.tugalsan.api.sql.select.server.*;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
+import com.tugalsan.api.union.client.TGS_UnionExcuseVoid;
 
 public class TS_SQLAdvUtils {
 
     final private static TS_Log d = TS_Log.of(TS_SQLAdvUtils.class);
 
-    public static long getOptimalPoolSizeInMb(TS_SQLConnAnchor anchor, float maxPercentOfRam) {
+    public static TGS_UnionExcuse<Integer> getOptimalPoolSizeInMb(TS_SQLConnAnchor anchor, float maxPercentOfRam) {
         var ramInMB = TS_OsPlatformUtils.getRamInMB();
         d.cr("getOptimalPoolValue", "#0", "ramInMB", ramInMB);
         var thresholdMB = ramInMB * maxPercentOfRam;
         d.cr("getOptimalPoolValue", "#1", "thresholdMB", thresholdMB);
         var sql = "SELECT CEILING(Total_InnoDB_Bytes*1.6/POWER(1024,3)) RIBPS FROM (SELECT SUM(data_length+index_length) Total_InnoDB_Bytes FROM information_schema.tables WHERE engine='InnoDB') A";
-        TGS_Tuple1<Long> pack = new TGS_Tuple1();
-        TS_SQLSelectStmtUtils.select(anchor, sql, rs -> pack.value0 = rs.lng.get(0, 0));
-        var optimumMB = pack.value0 * 1024;
+        var wrap = new Object() {
+            TGS_UnionExcuse<Long> result = null;
+        };
+        TS_SQLSelectStmtUtils.select(anchor, sql, rs -> wrap.result = rs.lng.get(0, 0));
+        if (wrap.result.isExcuse()) {
+            return wrap.result.toExcuse();
+        }
+        var optimumMB = wrap.result.value() * 1024;
         d.cr("getOptimalPoolValue", "#2", "optimumMB", optimumMB);
         if (optimumMB > thresholdMB) {
             optimumMB = (long) thresholdMB;
         }
         d.cr("getOptimalPoolValue", "#3", "optimumMB", optimumMB);
-        return (int) (long) optimumMB;
+        return TGS_UnionExcuse.of((int) (long) optimumMB);
     }
 
     @Deprecated
-    public static void writeDEFAULTMyINI(TS_SQLConnAnchor anchor) {
-        TS_FileTxtUtils.toFile(getDefaultMyINIContent(anchor), Path.of("D:\\xampp\\mysql\\bin\\my.ini"), false);
+    public static TGS_UnionExcuseVoid writeDEFAULTMyINI(TS_SQLConnAnchor anchor) {
+        var u_content = getDefaultMyINIContent(anchor);
+        if (u_content.isExcuse()) {
+            return u_content.toExcuseVoid();
+        }
+        return TS_FileTxtUtils.toFile(u_content.value(), Path.of("D:\\xampp\\mysql\\bin\\my.ini"), false);
     }
 
-    public static String getDefaultMyINIContent(TS_SQLConnAnchor anchor) {
+    public static TGS_UnionExcuse<String> getDefaultMyINIContent(TS_SQLConnAnchor anchor) {
         var sj = new StringJoiner("\n");
         sj.add("""
                # Example MySQL config file for small systems.
@@ -191,8 +201,11 @@ public class TS_SQLAdvUtils {
                """);
 
         var poolsize = getOptimalPoolSizeInMb(anchor, 0.125f);
-        sj.add("innodb_buffer_pool_size=" + poolsize + "m");
-        sj.add("innodb_buffer_pool_instance=" + (poolsize > 1024 ? 2 : 1));
+        if (poolsize.isExcuse()) {
+            return poolsize.toExcuse();
+        }
+        sj.add("innodb_buffer_pool_size=" + poolsize.value() + "m");
+        sj.add("innodb_buffer_pool_instance=" + (poolsize.value() > 1024 ? 2 : 1));
         sj.add("""
                ## Set .._log_file_size to 25 % of buffer pool size
                innodb_log_file_size=5M
@@ -233,6 +246,6 @@ public class TS_SQLAdvUtils {
                
                [mysqlhotcopy]
                """);
-        return sj.toString();
+        return TGS_UnionExcuse.of(sj.toString());
     }
 }

@@ -7,7 +7,7 @@ import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.sql.col.typed.client.*;
 import com.tugalsan.api.sql.conn.server.*;
 import com.tugalsan.api.sql.select.server.*;
-import com.tugalsan.api.unsafe.client.*;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
 
 public class TS_SQLAdvTestUtils {
 
@@ -40,10 +40,20 @@ public class TS_SQLAdvTestUtils {
         d.ce("testVariables", "cast2String(ia).o-> " + TGS_StringUtils.toString(o, ", "));
         d.ce("testVariables", "//SET ARR STR");
         d.ce("testVariables", "setVariable(arrName1, ia)-> " + TS_SQLAdvVarUtils.setVariable(anchor, arrName1, ia));
-        d.ce("testVariables", "cast2String(ia) -> " + TGS_StringUtils.toString((List) TS_SQLAdvVarUtils.getVarible(anchor, arrName1, TS_SQLAdvVarUtils.VARTYP_ARR_STR()), ", "));
+        var u_list = TS_SQLAdvVarUtils.getVarible(anchor, arrName1, TS_SQLAdvVarUtils.VARTYP_ARR_STR());
+        if (u_list.isExcuse()) {
+            u_list.excuse().printStackTrace();
+            return;
+        }
+        d.ce("testVariables", "cast2String(ia) -> " + TGS_StringUtils.toString((List) u_list.value(), ", "));
         d.ce("testVariables", "//SET ARR LNG");
         d.ce("testVariables", "setVariable(arrName2, ib)-> " + TS_SQLAdvVarUtils.setVariable(anchor, arrName2, ib));
-        d.ce("testVariables", "cast2String(ia) -> " + TGS_StringUtils.toString((List) TS_SQLAdvVarUtils.getVarible(anchor, arrName2, TS_SQLAdvVarUtils.VARTYP_ARR_LNG()), ", "));
+        u_list = TS_SQLAdvVarUtils.getVarible(anchor, arrName2, TS_SQLAdvVarUtils.VARTYP_ARR_LNG());
+        if (u_list.isExcuse()) {
+            u_list.excuse().printStackTrace();
+            return;
+        }
+        d.ce("testVariables", "cast2String(ia) -> " + TGS_StringUtils.toString((List) u_list.value(), ", "));
     }
 
     public static void testFunction(TS_SQLConnAnchor anchor) {
@@ -56,16 +66,14 @@ public class TS_SQLAdvTestUtils {
         });
     }
 
-    private static TS_SQLConnStmtUpdateResult testFunction_createSniffFunc(TS_SQLConnAnchor anchor) {
-        return TGS_UnSafe.call(() -> {
-            var func_intput = TGS_ListUtils.of(
-                    new TGS_SQLColTyped("STR254_SRCTBLNM"),
-                    new TGS_SQLColTyped("STR254_TARTBLNM"),
-                    new TGS_SQLColTyped("LNG_ID")
-            );
-            var funcBody = new StringBuilder();
-            funcBody.append("RETURN CONCAT(STR254_SRCTBLNM, '_', STR254_TARTBLNM, '-', LNG_ID)");
-            return TS_SQLAdvFuncUtils.createFunction(anchor, "sniff", func_intput, new TGS_SQLColTyped("STR254_OUT"), funcBody.toString());
-        });
+    private static TGS_UnionExcuse<TS_SQLConnStmtUpdateResult> testFunction_createSniffFunc(TS_SQLConnAnchor anchor) {
+        var func_intput = TGS_ListUtils.of(
+                new TGS_SQLColTyped("STR254_SRCTBLNM"),
+                new TGS_SQLColTyped("STR254_TARTBLNM"),
+                new TGS_SQLColTyped("LNG_ID")
+        );
+        var funcBody = new StringBuilder();
+        funcBody.append("RETURN CONCAT(STR254_SRCTBLNM, '_', STR254_TARTBLNM, '-', LNG_ID)");
+        return TS_SQLAdvFuncUtils.createFunction(anchor, "sniff", func_intput, new TGS_SQLColTyped("STR254_OUT"), funcBody.toString());
     }
 }

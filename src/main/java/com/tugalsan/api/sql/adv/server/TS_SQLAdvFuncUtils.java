@@ -7,6 +7,7 @@ import com.tugalsan.api.sql.conn.server.*;
 import com.tugalsan.api.sql.sanitize.server.*;
 import com.tugalsan.api.sql.update.server.*;
 import com.tugalsan.api.string.client.*;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
 import java.util.stream.*;
 
 public class TS_SQLAdvFuncUtils {
@@ -25,20 +26,23 @@ public class TS_SQLAdvFuncUtils {
     //      Select current_date()into date2;
     //      RETURN year(date2)-year(date1);
     //    END 
-    public static TS_SQLConnStmtUpdateResult createFunction(TS_SQLConnAnchor anchor, CharSequence functionName,
+    public static TGS_UnionExcuse<TS_SQLConnStmtUpdateResult> createFunction(TS_SQLConnAnchor anchor, CharSequence functionName,
             List<TGS_SQLColTyped> inputParams, TGS_SQLColTyped output, CharSequence body) {
         TS_SQLSanitizeUtils.sanitize(functionName);
         TS_SQLSanitizeUtils.sanitize(inputParams);
         TS_SQLSanitizeUtils.sanitize(output);
         var sql = "DROP FUNCTION IF EXISTS " + functionName;
         var r = TS_SQLUpdateStmtUtils.update(anchor, sql);
+        if (r.isExcuse()){
+            return r.toExcuse();
+        }
         d.ci("createFunction.INFO: Connection.createFunction.sql0: ", sql, ", r:", r);
 
         var sb = new StringBuilder();
         sb.append("CREATE FUNCTION ").append(functionName).append('(');
 
         //SETTING INPUT TYPE
-        IntStream.range(r.affectedRowCount, inputParams.size()).forEachOrdered(i -> {
+        IntStream.range(r.value().affectedRowCount(), inputParams.size()).forEachOrdered(i -> {
             sb.append(inputParams.get(i).toString());
             sb.append(' ');
             sb.append(TS_SQLConnColUtils.creationType(anchor, inputParams.get(i)));
@@ -63,7 +67,7 @@ public class TS_SQLAdvFuncUtils {
         return r;
     }
 
-    public static TS_SQLConnStmtUpdateResult deleteFunction(TS_SQLConnAnchor anchor, CharSequence functionName) {
+    public static TGS_UnionExcuse<TS_SQLConnStmtUpdateResult> deleteFunction(TS_SQLConnAnchor anchor, CharSequence functionName) {
         TS_SQLSanitizeUtils.sanitize(functionName);
         var sql = TGS_StringUtils.concat("DROP FUNCTION ", functionName);
         d.ci("deleteFunction.INFO: Connection.deleteFunction.sql: ", sql);

@@ -65,7 +65,7 @@ public class TS_SQLAdvFuncUtils {
 
     public static TS_SQLConnStmtUpdateResult deleteFunction(TS_SQLConnAnchor anchor, CharSequence functionName) {
         TS_SQLSanitizeUtils.sanitize(functionName);
-        var sql = TGS_StringUtils.concat("DROP FUNCTION ", functionName);
+        var sql = TGS_StringUtils.cmn().concat("DROP FUNCTION ", functionName);
         d.ci("deleteFunction.INFO: Connection.deleteFunction.sql: ", sql);
         var r = TS_SQLUpdateStmtUtils.update(anchor, sql);
         d.ci("deleteFunction.INFO: Connection.deleteFunction.r: ", r);

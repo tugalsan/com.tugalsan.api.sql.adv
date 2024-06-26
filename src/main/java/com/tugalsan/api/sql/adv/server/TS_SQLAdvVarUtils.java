@@ -36,13 +36,13 @@ public class TS_SQLAdvVarUtils {
     public static boolean setVariable_ArraySize(TS_SQLConnAnchor anchor, CharSequence atVarName, long size) {
         TS_SQLSanitizeUtils.sanitize(atVarName);
         d.ci("setVariable_ArraySize", "atVarname", atVarName, "size", size);
-        return setVariable(anchor, TGS_StringUtils.concat(atVarName, "_size"), size);
+        return setVariable(anchor, TGS_StringUtils.cmn().concat(atVarName, "_size"), size);
     }
 
     public static Long getVariable_ArraySize(TS_SQLConnAnchor anchor, CharSequence atVarName) {
         TS_SQLSanitizeUtils.sanitize(atVarName);
         d.ci("getVariable_ArraySize", "atVarname", atVarName);
-        var o = getVarible(anchor, TGS_StringUtils.concat(atVarName, "_size"), VARTYP_LNG());
+        var o = getVarible(anchor, TGS_StringUtils.cmn().concat(atVarName, "_size"), VARTYP_LNG());
         return o == null ? null : (Long) o;
     }
 
@@ -61,7 +61,7 @@ public class TS_SQLAdvVarUtils {
     public static boolean setVariable(TS_SQLConnAnchor anchor, CharSequence atVarName, long listIdx, Object value) {
         TS_SQLSanitizeUtils.sanitize(atVarName);
         d.ci("setVariable", "atVarname", atVarName, "arrayListIdx", listIdx, "value", value);
-        return value instanceof Long || value instanceof String ? setVariable(anchor, TGS_StringUtils.concat(atVarName, "_", String.valueOf(listIdx)), value) : false;
+        return value instanceof Long || value instanceof String ? setVariable(anchor, TGS_StringUtils.cmn().concat(atVarName, "_", String.valueOf(listIdx)), value) : false;
     }
 
     public static boolean setVariable(TS_SQLConnAnchor anchor, CharSequence atVarName, Object value) {
@@ -81,7 +81,7 @@ public class TS_SQLAdvVarUtils {
                 if (setVariable(anchor, atVarName, "ArrayList")) {
                     List<String> arrNames = TGS_ListUtils.of();
                     for (var i = 0; i < arrVal.size(); i++) {
-                        arrNames.add(TGS_StringUtils.concat(atVarName, "_", String.valueOf(i)));
+                        arrNames.add(TGS_StringUtils.cmn().concat(atVarName, "_", String.valueOf(i)));
                     }
                     if (pushVaribles(anchor, arrNames, arrVal)) {
                         return setVariable_ArraySize(anchor, atVarName, arrVal.size());
@@ -89,14 +89,14 @@ public class TS_SQLAdvVarUtils {
                 }
             }
             if (String.class.isInstance(value)) {
-                var sql = TGS_StringUtils.concat("SET ", atVarName, " := \"", String.valueOf(value), "\"");
+                var sql = TGS_StringUtils.cmn().concat("SET ", atVarName, " := \"", String.valueOf(value), "\"");
                 d.ci("setVariable", "String.class.isInstance(value)", "sql", sql);
                 TS_SQLUpdateStmtUtils.update(anchor, sql);
 
                 return true;
             }
             if (Integer.class.isInstance(value) || TGS_CastUtils.toLong(value) != null) {
-                var sql = TGS_StringUtils.concat("SET ", atVarName, " := ", String.valueOf(value));
+                var sql = TGS_StringUtils.cmn().concat("SET ", atVarName, " := ", String.valueOf(value));
                 d.ci("setVariable", "Integer.class.isInstance(value) || TK_GWTSharedUtils.cast2Long(value) != null", "sql", sql);
                 TS_SQLUpdateStmtUtils.update(anchor, sql);
 
@@ -135,7 +135,7 @@ public class TS_SQLAdvVarUtils {
                 return null;
             }
             List<String> arrNames = TGS_ListUtils.of();
-            LongStream.range(0, size).forEachOrdered(L -> arrNames.add(TGS_StringUtils.concat(atVarName, "_", String.valueOf(L))));
+            LongStream.range(0, size).forEachOrdered(L -> arrNames.add(TGS_StringUtils.cmn().concat(atVarName, "_", String.valueOf(L))));
             List<Long> arrValues = TGS_ListUtils.of();
             if (!popVaribles(anchor, arrNames, arrValues, long0_String1_ArrayLong2_ArrayString3 == VARTYP_ARR_LNG() ? VARTYP_LNG() : VARTYP_STR())) {
                 return null;
@@ -161,7 +161,7 @@ public class TS_SQLAdvVarUtils {
         d.ci("popVaribles.", "atVarNames", atVarNames, "result", result, "long0_String1", long0_String1);
         //SELECT @var1, @var2;
         result.clear();
-        var sql = "SELECT " + TGS_StringUtils.toString(atVarNames, ", ");
+        var sql = "SELECT " + TGS_StringUtils.cmn().toString(atVarNames, ", ");
         d.ci("popVaribles.INFO: Connection.popVaribles.sql: ", sql);
         TGS_Tuple1<Boolean> r = new TGS_Tuple1(false);
         TS_SQLSelectStmtUtils.select(anchor, sql, rs -> {

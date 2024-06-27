@@ -1,5 +1,5 @@
 module com.tugalsan.api.sql.adv {
-    requires com.tugalsan.api.callable;
+    requires com.tugalsan.api.function;
     requires com.tugalsan.api.os;
     requires com.tugalsan.api.cast;
     requires com.tugalsan.api.log;

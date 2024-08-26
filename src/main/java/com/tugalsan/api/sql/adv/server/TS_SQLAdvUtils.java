@@ -14,9 +14,9 @@ public class TS_SQLAdvUtils {
     final private static TS_Log d = TS_Log.of(TS_SQLAdvUtils.class);
 
     public static long getOptimalPoolSizeInMb(TS_SQLConnAnchor anchor, float maxPercentOfRam) {
-        var ramInMB = TS_OsPlatformUtils.getRamInMB();
-        d.cr("getOptimalPoolValue", "#0", "ramInMB", ramInMB);
-        var thresholdMB = ramInMB * maxPercentOfRam;
+        var totalRamInMB = TS_OsRamUtils.getTotalMemoryInMB();
+        d.cr("getOptimalPoolValue", "#0", "totalRamInMB", totalRamInMB);
+        var thresholdMB = totalRamInMB * maxPercentOfRam;
         d.cr("getOptimalPoolValue", "#1", "thresholdMB", thresholdMB);
         var sql = "SELECT CEILING(Total_InnoDB_Bytes*1.6/POWER(1024,3)) RIBPS FROM (SELECT SUM(data_length+index_length) Total_InnoDB_Bytes FROM information_schema.tables WHERE engine='InnoDB') A";
         TGS_Tuple1<Long> pack = new TGS_Tuple1();

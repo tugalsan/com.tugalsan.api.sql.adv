@@ -14,7 +14,7 @@ public class TS_SQLAdvUtils {
     final private static TS_Log d = TS_Log.of(TS_SQLAdvUtils.class);
 
     public static long getOptimalPoolSizeInMb(TS_SQLConnAnchor anchor, float maxPercentOfRam) {
-        var totalRamInMB = TS_OsRamUtils.getTotalMemoryInMB();
+        var totalRamInMB = TS_OsRamUtils.getTotalMemoryCurInMB();
         d.cr("getOptimalPoolValue", "#0", "totalRamInMB", totalRamInMB);
         var thresholdMB = totalRamInMB * maxPercentOfRam;
         d.cr("getOptimalPoolValue", "#1", "thresholdMB", thresholdMB);

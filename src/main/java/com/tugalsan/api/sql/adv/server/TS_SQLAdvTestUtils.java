@@ -1,5 +1,6 @@
 package com.tugalsan.api.sql.adv.server;
 
+import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
 import java.util.*;
 import com.tugalsan.api.list.client.*;
 import com.tugalsan.api.string.client.*;
@@ -7,7 +8,7 @@ import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.sql.col.typed.client.*;
 import com.tugalsan.api.sql.conn.server.*;
 import com.tugalsan.api.sql.select.server.*;
-import com.tugalsan.api.unsafe.client.*;
+
 
 public class TS_SQLAdvTestUtils {
 
@@ -57,7 +58,7 @@ public class TS_SQLAdvTestUtils {
     }
 
     private static TS_SQLConnStmtUpdateResult testFunction_createSniffFunc(TS_SQLConnAnchor anchor) {
-        return TGS_UnSafe.call(() -> {
+        return TGS_FuncMTCEUtils.call(() -> {
             var func_intput = TGS_ListUtils.of(
                     new TGS_SQLColTyped("STR254_SRCTBLNM"),
                     new TGS_SQLColTyped("STR254_TARTBLNM"),

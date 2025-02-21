@@ -96,7 +96,7 @@ public class TS_SQLAdvVarUtils {
 
                 return true;
             }
-            if (Integer.class.isInstance(value) || TGS_CastUtils.toLong(value) != null) {
+            if (Integer.class.isInstance(value) || TGS_CastUtils.toLong(value).isPresent()) {
                 var sql = TGS_StringUtils.cmn().concat("SET ", atVarName, " := ", String.valueOf(value));
                 d.ci("setVariable", "Integer.class.isInstance(value) || TK_GWTSharedUtils.cast2Long(value) != null", "sql", sql);
                 TS_SQLUpdateStmtUtils.update(anchor, sql);

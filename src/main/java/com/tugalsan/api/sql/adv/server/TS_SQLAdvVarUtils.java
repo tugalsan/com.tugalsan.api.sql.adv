@@ -3,7 +3,7 @@ package com.tugalsan.api.sql.adv.server;
 import java.util.*;
 import java.util.stream.*;
 import com.tugalsan.api.cast.client.*;
-import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
+import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
 import com.tugalsan.api.list.client.*;
 import com.tugalsan.api.tuple.client.*;
 import com.tugalsan.api.string.client.*;
@@ -66,7 +66,7 @@ public class TS_SQLAdvVarUtils {
     }
 
     public static boolean setVariable(TS_SQLConnAnchor anchor, CharSequence atVarName, Object value) {
-        return TGS_FuncMTCEUtils.call(() -> {
+        return TGS_FuncMTCUtils.call(() -> {
             TS_SQLSanitizeUtils.sanitize(atVarName);
             d.ci("setVariable", "atVarName", atVarName, "value", value);
             //SELECT @var3 := 4;??

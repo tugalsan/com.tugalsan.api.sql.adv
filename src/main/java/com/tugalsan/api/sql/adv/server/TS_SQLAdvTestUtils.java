@@ -66,7 +66,7 @@ public class TS_SQLAdvTestUtils {
             );
             var funcBody = new StringBuilder();
             funcBody.append("RETURN CONCAT(STR254_SRCTBLNM, '_', STR254_TARTBLNM, '-', LNG_ID)");
-            return TS_SQLAdvFuncUtils.createFunction(anchor, "sniff", func_intput, new TGS_SQLColTyped("STR254_OUT"), funcBody.toString());
+            return TS_SQLAdvFuncUtils.createFunction(anchor, "sniff", func_intput, TGS_SQLColTyped.of("STR254_OUT"), funcBody.toString());
         });
     }
 }

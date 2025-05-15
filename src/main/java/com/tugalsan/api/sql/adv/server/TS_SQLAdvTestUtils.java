@@ -60,9 +60,9 @@ public class TS_SQLAdvTestUtils {
     private static TS_SQLConnStmtUpdateResult testFunction_createSniffFunc(TS_SQLConnAnchor anchor) {
         return TGS_FuncMTCUtils.call(() -> {
             var func_intput = TGS_ListUtils.of(
-                    new TGS_SQLColTyped("STR254_SRCTBLNM"),
-                    new TGS_SQLColTyped("STR254_TARTBLNM"),
-                    new TGS_SQLColTyped("LNG_ID")
+                    TGS_SQLColTyped.of("STR254_SRCTBLNM"),
+                    TGS_SQLColTyped.of("STR254_TARTBLNM"),
+                    TGS_SQLColTyped.of("LNG_ID")
             );
             var funcBody = new StringBuilder();
             funcBody.append("RETURN CONCAT(STR254_SRCTBLNM, '_', STR254_TARTBLNM, '-', LNG_ID)");
